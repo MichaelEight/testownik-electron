@@ -30,7 +30,9 @@ function createWindow () {
     width: 1080,
     frame: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      // Disable dev tools in production builds
+      devTools: process.env.NODE_ENV === 'development'
     }
   })
 

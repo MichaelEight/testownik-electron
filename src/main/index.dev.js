@@ -10,8 +10,8 @@
 // Set environment for development
 process.env.NODE_ENV = 'development'
 
-// Install `electron-debug` with `devtron`
-require('electron-debug')({ showDevTools: true })
+// Install `electron-debug` without automatically opening dev tools
+require('electron-debug')({ showDevTools: false })
 
 // Install `vue-devtools`
 require('electron').app.on('ready', () => {
