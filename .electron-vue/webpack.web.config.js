@@ -52,8 +52,16 @@ let webConfig = {
           options: {
             extractCSS: true,
             loaders: {
-              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
-              scss: 'vue-style-loader!css-loader!sass-loader'
+              sass: [
+                'vue-style-loader',
+                'css-loader',
+                { loader: 'sass-loader', options: { implementation: require('sass'), sassOptions: { indentedSyntax: true } } }
+              ],
+              scss: [
+                'vue-style-loader',
+                'css-loader',
+                { loader: 'sass-loader', options: { implementation: require('sass') } }
+              ]
             }
           }
         }

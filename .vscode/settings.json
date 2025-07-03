@@ -1,0 +1,19 @@
+{
+    // Prevent folding for main.js by disabling semantic or brace folding if enabled
+    "editor.foldingStrategy": "auto",
+    "[javascript]": {
+        "editor.folding": false
+    },
+    // Override per-file folding via glob pattern
+    "files.exclude": {
+        "**/main.js": false
+    },
+    "files.associations": {
+        "main.js": "javascript"
+    },
+    // Disable any prettifiers or formatters auto-collapsing
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "never"
+    }
+}

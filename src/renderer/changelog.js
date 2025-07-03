@@ -7,5 +7,8 @@ export const versions = {
     'Drobne poprawki UI',
     'Poprawione błędy z niewłasciwym wyświetlaniem zdjęć',
     'Naprawiony błąd umożliwiający wpisanie ujemnych wartości w ustawienich'
+  ],
+  '0.8.0': [
+    'Poprawiony config, naprawione buildowanie dla najnowszych wersji'
   ]
 }

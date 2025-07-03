@@ -2,9 +2,16 @@
 <Modal @close="$emit('close')">
   <div slot="body">
     <h2>Testownik</h2>
-    <!-- <p>Autor: <b><a href="http://www.kumalg.pl" target="_blank">Kamil Golec</a></b></p> -->
-    <p>Autor: <b><a @click="openExternal('http://www.kumalg.pl')">Kamil Golec</a></b></p>
-    <p>Adres E-Mail: <b><a href="mailto:kumalgfilms@gmail.com">kumalgfilms@gmail.com</a></b></p>
+    <p>Autor: <b>{{ authorName }}</b></p>
+    <p>Adres E-Mail: <b><a :href="'mailto:' + authorEmail">{{ authorEmail }}</a></b></p>
+    <div v-if="contributors.length">
+       <h3>Oryginalny twórca:</h3>
+       <ul class="contributors-ul">
+         <li v-for="(contributor, index) in contributors" :key="index">
+           <span>{{ contributor.name }}</span> — <a :href="'mailto:' + contributor.email">{{ contributor.email }}</a>
+         </li>
+       </ul>
+     </div>
     <p>Wersja: <b>{{ appVersion }}</b></p>
     <h3>Co nowego w tej wersji?</h3>
     <ul v-if="whatsnew" class="whatsnew-ul">
@@ -18,8 +25,17 @@
 import { versions } from '@/changelog'
 import { shell } from 'electron'
 import Modal from '@/components/shared/Modal'
-const appVersion = require('electron').remote.app.getVersion()
-// const browserWindow = remote.getCurrentWindow()
+import pkg from '../../../../../package.json'
+
+const appVersion = pkg.version
+const authorMatch = pkg.author.match(/^(.*)\s<(.+)>$/)
+const authorName = authorMatch ? authorMatch[1].trim() : pkg.author
+const authorEmail = authorMatch ? authorMatch[2] : ''
+const contributorsArr = Array.isArray(pkg.contributors) ? pkg.contributors : []
+const contributors = contributorsArr.map(c => {
+  const m = c.match(/^(.*)\s<(.+)>$/)
+  return m ? { name: m[1].trim(), email: m[2] } : { name: c, email: '' }
+})
 
 export default {
   components: {
@@ -28,7 +44,10 @@ export default {
   data () {
     return {
       appVersion,
-      whatsnew: versions[appVersion]
+      whatsnew: versions[appVersion],
+      authorName,
+      authorEmail,
+      contributors
     }
   },
   methods: {
@@ -73,6 +92,16 @@ b {
   padding-left: 24px;
   > li {
     font-size: 0.875em;
+    margin: 6px 0;
+  }
+}
+
+.contributors-ul {
+  margin-top: 12px;
+  padding-left: 24px;
+  font-size: 0.875em;
+  color: var(--secondary-text);
+  li {
     margin: 6px 0;
   }
 }

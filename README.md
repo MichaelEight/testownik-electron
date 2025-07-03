@@ -15,6 +15,26 @@ Testownik provided keyboard support while test is running. You can use <kbd>1</k
 If You want to see sample quiz, please press <kbd>T</kbd> key after launch.
 
 
+## Building for Windows
+
+1. Install dependencies:
+   ```powershell
+   npm install
+   ```
+2. Build production app:
+   ```powershell
+   npm run build
+   ```
+   – produces NSIS installer & portable .exe in `build/`
+3. (Optional) Unpacked dir only:
+   ```powershell
+   npm run build:dir
+   ```
+4. (Optional) Custom targets:
+   ```powershell
+   npx electron-builder --win --x64 --ia32
+   ```
+
 ## Screenshots
 
 Dark theme:
