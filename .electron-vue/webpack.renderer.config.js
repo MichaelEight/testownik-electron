@@ -71,12 +71,12 @@ let rendererConfig = {
               sass: [
                 'vue-style-loader',
                 'css-loader',
-                { loader: 'sass-loader', options: { implementation: require('sass'), sassOptions: { indentedSyntax: true } } }
+                { loader: 'sass-loader', options: { sassOptions: { indentedSyntax: true } } }
               ],
               scss: [
                 'vue-style-loader',
                 'css-loader',
-                { loader: 'sass-loader', options: { implementation: require('sass') } }
+                'sass-loader'
               ]
             }
           }
