@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import LandingPage from '@/components/LandingPage'
 import Quiz from '@/components/Quiz'
+import QuizEditor from '@/components/QuizEditor'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       name: 'quiz',
       props: true,
       component: Quiz
+    },
+    {
+      path: '/editor',
+      name: 'quiz-editor',
+      component: QuizEditor
     },
     {
       path: '*',
