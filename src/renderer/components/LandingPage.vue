@@ -32,6 +32,16 @@
               <FontAwesomeIcon :icon="faCog"/>
             </i>
             Ustawienia
+          </button><button class="default-button" @click="openEditor">
+            <i>
+              <FontAwesomeIcon :icon="faPlus"/>
+            </i>
+            Nowy quiz
+          </button><button class="default-button" @click="sampleQuiz">
+            <i>
+              <FontAwesomeIcon :icon="faPlay"/>
+            </i>
+            EXAMPLE
           </button>
         </div>
       </div>
@@ -50,7 +60,7 @@ import { sampleQuiz } from '@/sampleQuiz'
 import fs from 'fs'
 import { promisify } from 'util'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faCog, faInfo, faPlus, faPlay } from '@fortawesome/fontawesome-free-solid'
 const readdirAsync = promisify(fs.readdir)
 const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
@@ -66,6 +76,8 @@ export default {
     return {
       faCog,
       faInfo,
+      faPlus,
+      faPlay,
       isDragOver: false,
       isContinueQuizModalOpen: false,
       newVersionAvailable: false
@@ -108,6 +120,9 @@ export default {
       this.$store.dispatch('deleteRecentFolder', quizPath)
       this.$store.dispatch('addNewRecentFolder', quizPath)
     },
+    openEditor () {
+      this.$router.push({ name: 'quiz-editor' })
+    },
     sampleQuiz () {
       this.$router.push({ name: 'quiz', params: { quizObject: JSON.parse(JSON.stringify(sampleQuiz)) } })
     }
@@ -118,11 +133,6 @@ export default {
     }
   },
   mounted () {
-    document.body.addEventListener('keyup', e => {
-      if (e.keyCode === 84 && !this.showFinishModal) {
-        this.sampleQuiz()
-      }
-    })
     this.$electron.ipcRenderer.on('updateReady', () => {
       this.newVersionAvailable = true
     })
