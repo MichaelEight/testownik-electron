@@ -1,6 +1,12 @@
 <template>
 <div>
   <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
+  <EditorChoiceModal
+    v-if="isEditorChoiceModalOpen"
+    ref="editorChoiceModal"
+    @close="isEditorChoiceModalOpen = false"
+    @new="openEditor"
+    @edit="editExistingQuiz"/>
   <div id="wrapper">
     <div class="left-column">
       <div class="left-column-content">
@@ -32,6 +38,16 @@
               <FontAwesomeIcon :icon="faCog"/>
             </i>
             Ustawienia
+          </button><button class="default-button" @click="showEditorChoice">
+            <i>
+              <FontAwesomeIcon :icon="faPlus"/>
+            </i>
+            Kreator
+          </button><button class="default-button" @click="sampleQuiz">
+            <i>
+              <FontAwesomeIcon :icon="faPlay"/>
+            </i>
+            EXAMPLE
           </button>
         </div>
       </div>
@@ -44,13 +60,14 @@
 <script>
 import RecentFolders from '@/components/LandingPage/RecentFolders'
 import ContinueQuizModal from '@/components/LandingPage/modals/ContinueQuizModal'
+import EditorChoiceModal from '@/components/LandingPage/modals/EditorChoiceModal'
 import questionsReader from '@/services/questionsReader'
 import quizMaker from '@/services/quizMaker'
 import { sampleQuiz } from '@/sampleQuiz'
 import fs from 'fs'
 import { promisify } from 'util'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faCog, faInfo, faPlus, faPlay } from '@fortawesome/fontawesome-free-solid'
 const readdirAsync = promisify(fs.readdir)
 const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
@@ -60,14 +77,18 @@ export default {
   components: {
     RecentFolders,
     FontAwesomeIcon,
-    ContinueQuizModal
+    ContinueQuizModal,
+    EditorChoiceModal
   },
   data () {
     return {
       faCog,
       faInfo,
+      faPlus,
+      faPlay,
       isDragOver: false,
       isContinueQuizModalOpen: false,
+      isEditorChoiceModalOpen: false,
       newVersionAvailable: false
     }
   },
@@ -108,6 +129,33 @@ export default {
       this.$store.dispatch('deleteRecentFolder', quizPath)
       this.$store.dispatch('addNewRecentFolder', quizPath)
     },
+    showEditorChoice () {
+      this.isEditorChoiceModalOpen = true
+    },
+    openEditor () {
+      this.$router.push({ name: 'quiz-editor' })
+    },
+    async editExistingQuiz () {
+      const path = await openDialogAsync({ properties: ['openDirectory'] })
+      if (!path || !path[0]) return
+      const folder = path[0]
+      const filenames = await readdirAsync(folder)
+      const texts = filenames.filter(f => f.endsWith('.txt')).map(file => {
+        const content = fs.readFileSync(folder + '/' + file, 'utf8')
+        return { file, content }
+      })
+      const questions = texts.map(t => {
+        const lines = t.content.split('\n').map(l => l.trim())
+        const answerFlags = lines[0].substring(1).split('').map(c => c === '1')
+        return {
+          text: lines[1] || '',
+          answers: lines.slice(2).map((line, idx) => {
+            return { text: line, isCorrect: answerFlags[idx] || false }
+          })
+        }
+      })
+      this.$router.push({ name: 'quiz-editor', params: { loadedQuestions: questions } })
+    },
     sampleQuiz () {
       this.$router.push({ name: 'quiz', params: { quizObject: JSON.parse(JSON.stringify(sampleQuiz)) } })
     }
@@ -118,11 +166,6 @@ export default {
     }
   },
   mounted () {
-    document.body.addEventListener('keyup', e => {
-      if (e.keyCode === 84 && !this.showFinishModal) {
-        this.sampleQuiz()
-      }
-    })
     this.$electron.ipcRenderer.on('updateReady', () => {
       this.newVersionAvailable = true
     })
