@@ -12,7 +12,7 @@ You can download and install this app from [Releases page](https://github.com/ku
 Testownik provided keyboard support while test is running. You can use <kbd>1</kbd> - <kbd>9</kbd> keys to select/unselect answer choices and <kbd>Space</kbd> key to accept answer.
 
 ### Sample Quiz
-If You want to see sample quiz, please press <kbd>T</kbd> key after launch.
+If You want to see sample quiz, press the **EXAMPLE** button after launch.
 
 
 ## Building for Windows
@@ -38,9 +38,15 @@ If You want to see sample quiz, please press <kbd>T</kbd> key after launch.
 ## Screenshots
 
 Dark theme:
-![testownik-electron/screenshots/landing_page_dark.png](https://github.com/kumalg/testownik-electron/blob/master/screenshots/landing_page_dark.png)
-![testownik-electron/screenshots/quiz_dark.png](https://github.com/kumalg/testownik-electron/blob/master/screenshots/quiz_dark.png)
+![landing_page_dark](screenshots/landing_page_dark.png)
+![quiz_dark](screenshots/quiz_dark.png)
 
 Light theme:
-![testownik-electron/screenshots/landing_page_light.png](https://github.com/kumalg/testownik-electron/blob/master/screenshots/landing_page_light.png)
-![testownik-electron/screenshots/quiz_light.png](https://github.com/kumalg/testownik-electron/blob/master/screenshots/quiz_light.png)
+![landing_page_light](screenshots/landing_page_light.png)
+![quiz_light](screenshots/quiz_light.png)
+
+Main screen:
+![mainScreen](screenshots/mainScreen.png)
+
+Quiz creator:
+![quizCreator](screenshots/quizCreator.png)
