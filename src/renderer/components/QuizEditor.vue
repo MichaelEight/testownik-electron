@@ -340,3 +340,19 @@ input.answer-input::placeholder {
   color: #888 !important;
 }
 </style>
+<style scoped>
+.question-input.custom-input {
+  /* Make question input as long as answer inputs */
+  width: 100%;
+  min-width: 0;
+  /* Make it visually unique */
+  font-weight: bold;
+  background: #e8f5e9 !important; /* subtle green tint */
+  border: 2px solid #39b54a;
+  font-size: 1.05em;
+}
+.question-input.custom-input:focus {
+  border-color: #2e9140;
+  background: #d0f2d6 !important;
+}
+</style>
